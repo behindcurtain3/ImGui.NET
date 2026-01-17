@@ -5,7 +5,7 @@ param (
 
 if( -not $repository )
 {
-    $repository="https://github.com/mellinoe/imgui.net-nativebuild"
+    $repository="https://github.com/behindcurtain3/imgui.net-nativebuild"
 }
 
 Write-Host Downloading native binaries from GitHub Releases...
@@ -37,7 +37,7 @@ Write-Host "- cimgui.dll (x86)"
 
 $client.DownloadFile(
     "$repository/releases/download/$tag/cimgui.win-x64.dll",
-    "$PSScriptRoot/deps/cimgui/win-x64/$configuration/cimgui.dll")
+    "$PSScriptRoot/deps/cimgui/win-x64/cimgui.dll")
 if( -not $? )
 {
     $msg = $Error[0].Exception.Message
@@ -49,7 +49,7 @@ Write-Host "- cimgui.dll (x64)"
 
 $client.DownloadFile(
     "$repository/releases/download/$tag/cimgui.win-arm64.dll",
-    "$PSScriptRoot/deps/cimgui/win-arm64/$configuration/cimgui.dll")
+    "$PSScriptRoot/deps/cimgui/win-arm64/cimgui.dll")
 if( -not $? )
 {
     $msg = $Error[0].Exception.Message
@@ -84,7 +84,7 @@ if( -not $? )
 Write-Host "- cimgui.dylib"
 
 $client.DownloadFile(
-    "https://github.com/mellinoe/imgui.net-nativebuild/releases/download/$tag/definitions.json",
+    "$repository/releases/download/$tag/definitions.json",
     "$PSScriptRoot/src/CodeGenerator/definitions/cimgui/definitions.json")
 if( -not $? )
 {
@@ -96,7 +96,7 @@ if( -not $? )
 Write-Host - definitions.json
 
 $client.DownloadFile(
-    "https://github.com/mellinoe/imgui.net-nativebuild/releases/download/$tag/structs_and_enums.json",
+    "$repository/releases/download/$tag/structs_and_enums.json",
     "$PSScriptRoot/src/CodeGenerator/definitions/cimgui/structs_and_enums.json")
 if( -not $? )
 {

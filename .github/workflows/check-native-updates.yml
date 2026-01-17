@@ -1,0 +1,107 @@
+name: Check for Native Build Updates
+
+on:
+  schedule:
+    # Run every 6 hours
+    - cron: '0 */6 * * *'
+  workflow_dispatch:
+
+env:
+  NATIVE_BUILD_REPO: behindcurtain3/imgui.net-nativebuild
+
+jobs:
+  check-updates:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Get current version
+        id: current
+        run: |
+          # Extract version from ImGui.NET.csproj
+          CURRENT_VERSION=$(grep -oP '(?<=<AssemblyVersion>)[^<]+' src/ImGui.NET/ImGui.NET.csproj | head -1)
+          echo "Current version: $CURRENT_VERSION"
+          echo "version=$CURRENT_VERSION" >> $GITHUB_OUTPUT
+
+      - name: Get latest native build release
+        id: latest
+        run: |
+          LATEST_TAG=$(curl -s https://api.github.com/repos/${{ env.NATIVE_BUILD_REPO }}/releases/latest | jq -r '.tag_name')
+          echo "Latest native build: $LATEST_TAG"
+          echo "tag=$LATEST_TAG" >> $GITHUB_OUTPUT
+
+          # Extract version number (remove 'v' prefix if present)
+          LATEST_VERSION=${LATEST_TAG#v}
+          echo "version=$LATEST_VERSION" >> $GITHUB_OUTPUT
+
+      - name: Check if update needed
+        id: check
+        run: |
+          CURRENT="${{ steps.current.outputs.version }}"
+          LATEST="${{ steps.latest.outputs.version }}"
+
+          # Compare versions (simple string comparison, works for semver)
+          if [ "$CURRENT" != "$LATEST" ] && [ "$CURRENT" != "${LATEST}.1" ]; then
+            echo "Update available: $CURRENT -> $LATEST"
+            echo "needs_update=true" >> $GITHUB_OUTPUT
+          else
+            echo "Already up to date"
+            echo "needs_update=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Setup .NET
+        if: steps.check.outputs.needs_update == 'true'
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Download new native dependencies
+        if: steps.check.outputs.needs_update == 'true'
+        run: |
+          chmod +x ./download-native-deps.sh
+          ./download-native-deps.sh "${{ steps.latest.outputs.tag }}"
+
+      - name: Run CodeGenerator
+        if: steps.check.outputs.needs_update == 'true'
+        run: |
+          dotnet build src/CodeGenerator -c Release
+          ./bin/Release/CodeGenerator/net8.0/CodeGenerator src/ImGui.NET/Generated
+
+      - name: Update version in csproj
+        if: steps.check.outputs.needs_update == 'true'
+        run: |
+          NEW_VERSION="${{ steps.latest.outputs.version }}.1"
+          sed -i "s/<AssemblyVersion>.*<\/AssemblyVersion>/<AssemblyVersion>$NEW_VERSION<\/AssemblyVersion>/" src/ImGui.NET/ImGui.NET.csproj
+          sed -i "s/<FileVersion>.*<\/FileVersion>/<FileVersion>$NEW_VERSION<\/FileVersion>/" src/ImGui.NET/ImGui.NET.csproj
+          echo "Updated version to $NEW_VERSION"
+
+      - name: Create Pull Request
+        if: steps.check.outputs.needs_update == 'true'
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "Update to Dear ImGui ${{ steps.latest.outputs.tag }}"
+          title: "Update to Dear ImGui ${{ steps.latest.outputs.tag }}"
+          body: |
+            This PR automatically updates ImGui.NET to Dear ImGui ${{ steps.latest.outputs.tag }}.
+
+            ## Changes
+            - Downloaded new native binaries from [${{ env.NATIVE_BUILD_REPO }}](https://github.com/${{ env.NATIVE_BUILD_REPO }}/releases/tag/${{ steps.latest.outputs.tag }})
+            - Regenerated C# wrapper code
+            - Updated assembly version
+
+            ## Changelog
+            See the [Dear ImGui changelog](https://github.com/ocornut/imgui/releases/tag/${{ steps.latest.outputs.tag }}) for details.
+
+            ---
+            *This PR was automatically created by the update checker workflow.*
+          branch: update/imgui-${{ steps.latest.outputs.tag }}
+          labels: |
+            automated
+            update
