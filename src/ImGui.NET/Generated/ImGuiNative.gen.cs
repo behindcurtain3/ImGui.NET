@@ -1281,7 +1281,7 @@ namespace ImGuiNET
         [DllImport("cimgui", CallingConvention = CallingConvention.Cdecl)]
         public static extern void ImGuiTextBuffer_append(ImGuiTextBuffer* self, byte* str, byte* str_end);
         [DllImport("cimgui", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void ImGuiTextBuffer_appendf(ImGuiTextBuffer* buffer, byte* fmt);
+        public static extern void ImGuiTextBuffer_appendf(struct ImGuiTextBuffer* buffer, byte* fmt);
         [DllImport("cimgui", CallingConvention = CallingConvention.Cdecl)]
         public static extern byte* ImGuiTextBuffer_begin(ImGuiTextBuffer* self);
         [DllImport("cimgui", CallingConvention = CallingConvention.Cdecl)]
