@@ -24,11 +24,19 @@ namespace CodeGenerator
             { "unsigned int", "uint" },
             { "ImVec2", "Vector2" },
             { "ImVec2_Simple", "Vector2" },
+            { "ImVec2_c", "Vector2" },
             { "ImVec3", "Vector3" },
             { "ImVec4", "Vector4" },
+            { "ImVec4_c", "Vector4" },
+            { "ImColor_c", "ImColor" },
+            { "ImTextureRef_c", "IntPtr" },
             { "ImWchar16", "ushort" }, //char is not blittable
             { "ImVec4_Simple", "Vector4" },
             { "ImColor_Simple", "ImColor" },
+            { "ImDrawTextFlags", "int" },
+            { "ImFontAtlasRectId", "int" },
+            { "ImFontAtlasBuilder", "IntPtr" },
+            { "ImFontAtlasBuilder*", "IntPtr" },
             { "ImTextureID", "IntPtr" },
             { "ImGuiID", "uint" },
             { "ImDrawIdx", "ushort" },
@@ -42,6 +50,9 @@ namespace CodeGenerator
             { "ImGuiMemAllocFunc", "IntPtr" },
             { "ImGuiMemFreeFunc", "IntPtr" },
             { "ImFontBuilderIO", "IntPtr" },
+            { "ImFontLoader", "IntPtr" },
+            { "ImFontLoader*", "IntPtr" },
+            { "const ImFontLoader*", "IntPtr" },
             { "float[2]", "Vector2*" },
             { "float[3]", "Vector3*" },
             { "float[4]", "Vector4*" },
@@ -159,7 +170,8 @@ namespace CodeGenerator
         {
             "igInputText",
             "igInputTextMultiline",
-            "igInputTextWithHint"
+            "igInputTextWithHint",
+            "ImGuiFreeType_DebugEditFontLoaderFlags"
         };
     }
 }

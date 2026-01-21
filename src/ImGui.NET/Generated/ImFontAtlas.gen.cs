@@ -62,8 +62,8 @@ namespace ImGuiNET
         public int TexNextUniqueID;
         public int FontNextUniqueID;
         public ImVector DrawListSharedDatas;
-        public ImFontAtlasBuilder* Builder;
-        public ImFontLoader* FontLoader;
+        public IntPtr Builder;
+        public IntPtr FontLoader;
         public byte* FontLoaderName;
         public void* FontLoaderData;
         public uint FontLoaderFlags;
@@ -101,23 +101,23 @@ namespace ImGuiNET
         public ref int TexNextUniqueID => ref Unsafe.AsRef<int>(&NativePtr->TexNextUniqueID);
         public ref int FontNextUniqueID => ref Unsafe.AsRef<int>(&NativePtr->FontNextUniqueID);
         public ImVector<IntPtr> DrawListSharedDatas => new ImVector<IntPtr>(NativePtr->DrawListSharedDatas);
-        public ImFontAtlasBuilderPtr Builder => new ImFontAtlasBuilderPtr(NativePtr->Builder);
-        public ImFontLoaderPtr FontLoader => new ImFontLoaderPtr(NativePtr->FontLoader);
+        public ref IntPtr Builder => ref Unsafe.AsRef<IntPtr>(&NativePtr->Builder);
+        public ref IntPtr FontLoader => ref Unsafe.AsRef<IntPtr>(&NativePtr->FontLoader);
         public NullTerminatedString FontLoaderName => new NullTerminatedString(NativePtr->FontLoaderName);
         public IntPtr FontLoaderData { get => (IntPtr)NativePtr->FontLoaderData; set => NativePtr->FontLoaderData = (void*)value; }
         public ref uint FontLoaderFlags => ref Unsafe.AsRef<uint>(&NativePtr->FontLoaderFlags);
         public ref int RefCount => ref Unsafe.AsRef<int>(&NativePtr->RefCount);
         public ref IntPtr OwnerContext => ref Unsafe.AsRef<IntPtr>(&NativePtr->OwnerContext);
-        public ImFontAtlasRectId AddCustomRect(int width, int height)
+        public int AddCustomRect(int width, int height)
         {
             ImFontAtlasRect* out_r = null;
-            ImFontAtlasRectId ret = ImGuiNative.ImFontAtlas_AddCustomRect((ImFontAtlas*)(NativePtr), width, height, out_r);
+            int ret = ImGuiNative.ImFontAtlas_AddCustomRect((ImFontAtlas*)(NativePtr), width, height, out_r);
             return ret;
         }
-        public ImFontAtlasRectId AddCustomRect(int width, int height, ImFontAtlasRectPtr out_r)
+        public int AddCustomRect(int width, int height, ImFontAtlasRectPtr out_r)
         {
             ImFontAtlasRect* native_out_r = out_r.NativePtr;
-            ImFontAtlasRectId ret = ImGuiNative.ImFontAtlas_AddCustomRect((ImFontAtlas*)(NativePtr), width, height, native_out_r);
+            int ret = ImGuiNative.ImFontAtlas_AddCustomRect((ImFontAtlas*)(NativePtr), width, height, native_out_r);
             return ret;
         }
         public ImFontPtr AddFont(ImFontConfigPtr font_cfg)
@@ -712,7 +712,7 @@ namespace ImGuiNET
         {
             ImGuiNative.ImFontAtlas_destroy((ImFontAtlas*)(NativePtr));
         }
-        public bool GetCustomRect(ImFontAtlasRectId id, ImFontAtlasRectPtr out_r)
+        public bool GetCustomRect(int id, ImFontAtlasRectPtr out_r)
         {
             ImFontAtlasRect* native_out_r = out_r.NativePtr;
             byte ret = ImGuiNative.ImFontAtlas_GetCustomRect((ImFontAtlas*)(NativePtr), id, native_out_r);
@@ -723,7 +723,7 @@ namespace ImGuiNET
             ushort* ret = ImGuiNative.ImFontAtlas_GetGlyphRangesDefault((ImFontAtlas*)(NativePtr));
             return (IntPtr)ret;
         }
-        public void RemoveCustomRect(ImFontAtlasRectId id)
+        public void RemoveCustomRect(int id)
         {
             ImGuiNative.ImFontAtlas_RemoveCustomRect((ImFontAtlas*)(NativePtr), id);
         }
@@ -732,10 +732,9 @@ namespace ImGuiNET
             ImFont* native_font = font.NativePtr;
             ImGuiNative.ImFontAtlas_RemoveFont((ImFontAtlas*)(NativePtr), native_font);
         }
-        public void SetFontLoader(ImFontLoaderPtr font_loader)
+        public void SetFontLoader(IntPtr font_loader)
         {
-            ImFontLoader* native_font_loader = font_loader.NativePtr;
-            ImGuiNative.ImFontAtlas_SetFontLoader((ImFontAtlas*)(NativePtr), native_font_loader);
+            ImGuiNative.ImFontAtlas_SetFontLoader((ImFontAtlas*)(NativePtr), font_loader);
         }
     }
 }

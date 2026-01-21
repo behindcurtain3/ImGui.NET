@@ -179,9 +179,13 @@ namespace CodeGenerator
                                 vectorElementType = wellKnown;
                             }
 
+                            // Check if the field is a pointer to ImVector (ends with *)
+                            bool isPointerToVector = typeStr.EndsWith("*");
+                            string fieldAccess = isPointerToVector ? $"*NativePtr->{field.Name}" : $"NativePtr->{field.Name}";
+
                             if (GetWrappedType(vectorElementType + "*", out string wrappedElementType))
                             {
-                                writer.WriteLine($"public ImPtrVector<{wrappedElementType}> {field.Name} => new ImPtrVector<{wrappedElementType}>(NativePtr->{field.Name}, Unsafe.SizeOf<{vectorElementType}>());");
+                                writer.WriteLine($"public ImPtrVector<{wrappedElementType}> {field.Name} => new ImPtrVector<{wrappedElementType}>({fieldAccess}, Unsafe.SizeOf<{vectorElementType}>());");
                             }
                             else
                             {
@@ -189,7 +193,7 @@ namespace CodeGenerator
                                 {
                                     vectorElementType = wrappedElementType;
                                 }
-                                writer.WriteLine($"public ImVector<{vectorElementType}> {field.Name} => new ImVector<{vectorElementType}>(NativePtr->{field.Name});");
+                                writer.WriteLine($"public ImVector<{vectorElementType}> {field.Name} => new ImVector<{vectorElementType}>({fieldAccess});");
                             }
                         }
                         else
@@ -650,21 +654,29 @@ namespace CodeGenerator
                 }
                 else if ((tr.Type.EndsWith("*") || tr.Type.Contains("[") || tr.Type.EndsWith("&")) && tr.Type != "void*" && tr.Type != "ImGuiContext*" && tr.Type != "ImPlotContext*"&& tr.Type != "EditorContext*")
                 {
-                    string nonPtrType;
-                    if (tr.Type.Contains("["))
+                    // Check if this pointer type maps directly to IntPtr (no ref needed)
+                    if (TypeInfo.WellKnownTypes.TryGetValue(tr.Type, out string wellKnownType) && wellKnownType == "IntPtr")
                     {
-                        string wellKnown = TypeInfo.WellKnownTypes[tr.Type];
-                        nonPtrType = GetTypeString(wellKnown.Substring(0, wellKnown.Length - 1), false);
+                        marshalledParameters[i] = new MarshalledParameter("IntPtr", false, correctedIdentifier, false);
                     }
                     else
                     {
-                        nonPtrType = GetTypeString(tr.Type.Substring(0, tr.Type.Length - 1), false);
+                        string nonPtrType;
+                        if (tr.Type.Contains("["))
+                        {
+                            string wellKnown = TypeInfo.WellKnownTypes[tr.Type];
+                            nonPtrType = GetTypeString(wellKnown.Substring(0, wellKnown.Length - 1), false);
+                        }
+                        else
+                        {
+                            nonPtrType = GetTypeString(tr.Type.Substring(0, tr.Type.Length - 1), false);
+                        }
+                        string nativeArgName = "native_" + tr.Name;
+                        bool isOutParam = tr.Name.Contains("out_") || tr.Name == "out";
+                        string direction = isOutParam ? "out" : "ref";
+                        marshalledParameters[i] = new MarshalledParameter($"{direction} {nonPtrType}", true, nativeArgName, false);
+                        marshalledParameters[i].PinTarget = CorrectIdentifier(tr.Name);
                     }
-                    string nativeArgName = "native_" + tr.Name;
-                    bool isOutParam = tr.Name.Contains("out_") || tr.Name == "out";
-                    string direction = isOutParam ? "out" : "ref";
-                    marshalledParameters[i] = new MarshalledParameter($"{direction} {nonPtrType}", true, nativeArgName, false);
-                    marshalledParameters[i].PinTarget = CorrectIdentifier(tr.Name);
                 }
                 else
                 {
@@ -743,6 +755,11 @@ namespace CodeGenerator
                 if (mp.IsPinned)
                 {
                     string nativePinType = GetTypeString(tr.Type, false);
+                    // fixed statement requires a pointer type, not IntPtr
+                    if (nativePinType == "IntPtr")
+                    {
+                        nativePinType = "IntPtr*";
+                    }
                     writer.PushBlock($"fixed ({nativePinType} native_{tr.Name} = &{mp.PinTarget})");
                 }
 

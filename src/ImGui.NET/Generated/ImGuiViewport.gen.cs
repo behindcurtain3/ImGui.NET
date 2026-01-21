@@ -38,14 +38,14 @@ namespace ImGuiNET
         {
             ImGuiNative.ImGuiViewport_destroy((ImGuiViewport*)(NativePtr));
         }
-        public ImVec2_c GetCenter()
+        public Vector2 GetCenter()
         {
-            ImVec2_c ret = ImGuiNative.ImGuiViewport_GetCenter((ImGuiViewport*)(NativePtr));
+            Vector2 ret = ImGuiNative.ImGuiViewport_GetCenter((ImGuiViewport*)(NativePtr));
             return ret;
         }
-        public ImVec2_c GetWorkCenter()
+        public Vector2 GetWorkCenter()
         {
-            ImVec2_c ret = ImGuiNative.ImGuiViewport_GetWorkCenter((ImGuiViewport*)(NativePtr));
+            Vector2 ret = ImGuiNative.ImGuiViewport_GetWorkCenter((ImGuiViewport*)(NativePtr));
             return ret;
         }
     }

@@ -2506,7 +2506,7 @@ namespace ImGuiNET
             return ret;
         }
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP2_1_OR_GREATER
-        public static ImVec2_c CalcTextSize(ReadOnlySpan<char> text)
+        public static Vector2 CalcTextSize(ReadOnlySpan<char> text)
         {
             byte* native_text;
             int text_byteCount = 0;
@@ -2528,7 +2528,7 @@ namespace ImGuiNET
             else { native_text = null; }
             byte hide_text_after_double_hash = 0;
             float wrap_width = -1.0f;
-            ImVec2_c ret = ImGuiNative.igCalcTextSize(native_text, native_text+text_byteCount, hide_text_after_double_hash, wrap_width);
+            Vector2 ret = ImGuiNative.igCalcTextSize(native_text, native_text+text_byteCount, hide_text_after_double_hash, wrap_width);
             if (text_byteCount > Util.StackAllocationSizeLimit)
             {
                 Util.Free(native_text);
@@ -2536,7 +2536,7 @@ namespace ImGuiNET
             return ret;
         }
 #endif
-        public static ImVec2_c CalcTextSize(string text)
+        public static Vector2 CalcTextSize(string text)
         {
             byte* native_text;
             int text_byteCount = 0;
@@ -2558,7 +2558,7 @@ namespace ImGuiNET
             else { native_text = null; }
             byte hide_text_after_double_hash = 0;
             float wrap_width = -1.0f;
-            ImVec2_c ret = ImGuiNative.igCalcTextSize(native_text, native_text+text_byteCount, hide_text_after_double_hash, wrap_width);
+            Vector2 ret = ImGuiNative.igCalcTextSize(native_text, native_text+text_byteCount, hide_text_after_double_hash, wrap_width);
             if (text_byteCount > Util.StackAllocationSizeLimit)
             {
                 Util.Free(native_text);
@@ -2566,7 +2566,7 @@ namespace ImGuiNET
             return ret;
         }
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP2_1_OR_GREATER
-        public static ImVec2_c CalcTextSize(ReadOnlySpan<char> text, bool hide_text_after_double_hash)
+        public static Vector2 CalcTextSize(ReadOnlySpan<char> text, bool hide_text_after_double_hash)
         {
             byte* native_text;
             int text_byteCount = 0;
@@ -2588,7 +2588,7 @@ namespace ImGuiNET
             else { native_text = null; }
             byte native_hide_text_after_double_hash = hide_text_after_double_hash ? (byte)1 : (byte)0;
             float wrap_width = -1.0f;
-            ImVec2_c ret = ImGuiNative.igCalcTextSize(native_text, native_text+text_byteCount, native_hide_text_after_double_hash, wrap_width);
+            Vector2 ret = ImGuiNative.igCalcTextSize(native_text, native_text+text_byteCount, native_hide_text_after_double_hash, wrap_width);
             if (text_byteCount > Util.StackAllocationSizeLimit)
             {
                 Util.Free(native_text);
@@ -2596,7 +2596,7 @@ namespace ImGuiNET
             return ret;
         }
 #endif
-        public static ImVec2_c CalcTextSize(string text, bool hide_text_after_double_hash)
+        public static Vector2 CalcTextSize(string text, bool hide_text_after_double_hash)
         {
             byte* native_text;
             int text_byteCount = 0;
@@ -2618,7 +2618,7 @@ namespace ImGuiNET
             else { native_text = null; }
             byte native_hide_text_after_double_hash = hide_text_after_double_hash ? (byte)1 : (byte)0;
             float wrap_width = -1.0f;
-            ImVec2_c ret = ImGuiNative.igCalcTextSize(native_text, native_text+text_byteCount, native_hide_text_after_double_hash, wrap_width);
+            Vector2 ret = ImGuiNative.igCalcTextSize(native_text, native_text+text_byteCount, native_hide_text_after_double_hash, wrap_width);
             if (text_byteCount > Util.StackAllocationSizeLimit)
             {
                 Util.Free(native_text);
@@ -2626,7 +2626,7 @@ namespace ImGuiNET
             return ret;
         }
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP2_1_OR_GREATER
-        public static ImVec2_c CalcTextSize(ReadOnlySpan<char> text, bool hide_text_after_double_hash, float wrap_width)
+        public static Vector2 CalcTextSize(ReadOnlySpan<char> text, bool hide_text_after_double_hash, float wrap_width)
         {
             byte* native_text;
             int text_byteCount = 0;
@@ -2647,7 +2647,7 @@ namespace ImGuiNET
             }
             else { native_text = null; }
             byte native_hide_text_after_double_hash = hide_text_after_double_hash ? (byte)1 : (byte)0;
-            ImVec2_c ret = ImGuiNative.igCalcTextSize(native_text, native_text+text_byteCount, native_hide_text_after_double_hash, wrap_width);
+            Vector2 ret = ImGuiNative.igCalcTextSize(native_text, native_text+text_byteCount, native_hide_text_after_double_hash, wrap_width);
             if (text_byteCount > Util.StackAllocationSizeLimit)
             {
                 Util.Free(native_text);
@@ -2655,7 +2655,7 @@ namespace ImGuiNET
             return ret;
         }
 #endif
-        public static ImVec2_c CalcTextSize(string text, bool hide_text_after_double_hash, float wrap_width)
+        public static Vector2 CalcTextSize(string text, bool hide_text_after_double_hash, float wrap_width)
         {
             byte* native_text;
             int text_byteCount = 0;
@@ -2676,7 +2676,7 @@ namespace ImGuiNET
             }
             else { native_text = null; }
             byte native_hide_text_after_double_hash = hide_text_after_double_hash ? (byte)1 : (byte)0;
-            ImVec2_c ret = ImGuiNative.igCalcTextSize(native_text, native_text+text_byteCount, native_hide_text_after_double_hash, wrap_width);
+            Vector2 ret = ImGuiNative.igCalcTextSize(native_text, native_text+text_byteCount, native_hide_text_after_double_hash, wrap_width);
             if (text_byteCount > Util.StackAllocationSizeLimit)
             {
                 Util.Free(native_text);
@@ -3318,9 +3318,9 @@ namespace ImGuiNET
                 }
             }
         }
-        public static ImVec4_c ColorConvertU32ToFloat4(uint @in)
+        public static Vector4 ColorConvertU32ToFloat4(uint @in)
         {
-            ImVec4_c ret = ImGuiNative.igColorConvertU32ToFloat4(@in);
+            Vector4 ret = ImGuiNative.igColorConvertU32ToFloat4(@in);
             return ret;
         }
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP2_1_OR_GREATER
@@ -12524,9 +12524,9 @@ namespace ImGuiNET
             float ret = ImGuiNative.igGetColumnWidth(column_index);
             return ret;
         }
-        public static ImVec2_c GetContentRegionAvail()
+        public static Vector2 GetContentRegionAvail()
         {
-            ImVec2_c ret = ImGuiNative.igGetContentRegionAvail();
+            Vector2 ret = ImGuiNative.igGetContentRegionAvail();
             return ret;
         }
         public static IntPtr GetCurrentContext()
@@ -12534,9 +12534,9 @@ namespace ImGuiNET
             IntPtr ret = ImGuiNative.igGetCurrentContext();
             return ret;
         }
-        public static ImVec2_c GetCursorPos()
+        public static Vector2 GetCursorPos()
         {
-            ImVec2_c ret = ImGuiNative.igGetCursorPos();
+            Vector2 ret = ImGuiNative.igGetCursorPos();
             return ret;
         }
         public static float GetCursorPosX()
@@ -12549,14 +12549,14 @@ namespace ImGuiNET
             float ret = ImGuiNative.igGetCursorPosY();
             return ret;
         }
-        public static ImVec2_c GetCursorScreenPos()
+        public static Vector2 GetCursorScreenPos()
         {
-            ImVec2_c ret = ImGuiNative.igGetCursorScreenPos();
+            Vector2 ret = ImGuiNative.igGetCursorScreenPos();
             return ret;
         }
-        public static ImVec2_c GetCursorStartPos()
+        public static Vector2 GetCursorStartPos()
         {
-            ImVec2_c ret = ImGuiNative.igGetCursorStartPos();
+            Vector2 ret = ImGuiNative.igGetCursorStartPos();
             return ret;
         }
         public static ImGuiPayloadPtr GetDragDropPayload()
@@ -12589,9 +12589,9 @@ namespace ImGuiNET
             float ret = ImGuiNative.igGetFontSize();
             return ret;
         }
-        public static ImVec2_c GetFontTexUvWhitePixel()
+        public static Vector2 GetFontTexUvWhitePixel()
         {
-            ImVec2_c ret = ImGuiNative.igGetFontTexUvWhitePixel();
+            Vector2 ret = ImGuiNative.igGetFontTexUvWhitePixel();
             return ret;
         }
         public static ImDrawListPtr GetForegroundDrawList()
@@ -12691,19 +12691,19 @@ namespace ImGuiNET
             uint ret = ImGuiNative.igGetItemID();
             return ret;
         }
-        public static ImVec2_c GetItemRectMax()
+        public static Vector2 GetItemRectMax()
         {
-            ImVec2_c ret = ImGuiNative.igGetItemRectMax();
+            Vector2 ret = ImGuiNative.igGetItemRectMax();
             return ret;
         }
-        public static ImVec2_c GetItemRectMin()
+        public static Vector2 GetItemRectMin()
         {
-            ImVec2_c ret = ImGuiNative.igGetItemRectMin();
+            Vector2 ret = ImGuiNative.igGetItemRectMin();
             return ret;
         }
-        public static ImVec2_c GetItemRectSize()
+        public static Vector2 GetItemRectSize()
         {
-            ImVec2_c ret = ImGuiNative.igGetItemRectSize();
+            Vector2 ret = ImGuiNative.igGetItemRectSize();
             return ret;
         }
         public static string GetKeyName(ImGuiKey key)
@@ -12731,32 +12731,32 @@ namespace ImGuiNET
             ImGuiMouseCursor ret = ImGuiNative.igGetMouseCursor();
             return ret;
         }
-        public static ImVec2_c GetMouseDragDelta()
+        public static Vector2 GetMouseDragDelta()
         {
             ImGuiMouseButton button = (ImGuiMouseButton)0;
             float lock_threshold = -1.0f;
-            ImVec2_c ret = ImGuiNative.igGetMouseDragDelta(button, lock_threshold);
+            Vector2 ret = ImGuiNative.igGetMouseDragDelta(button, lock_threshold);
             return ret;
         }
-        public static ImVec2_c GetMouseDragDelta(ImGuiMouseButton button)
+        public static Vector2 GetMouseDragDelta(ImGuiMouseButton button)
         {
             float lock_threshold = -1.0f;
-            ImVec2_c ret = ImGuiNative.igGetMouseDragDelta(button, lock_threshold);
+            Vector2 ret = ImGuiNative.igGetMouseDragDelta(button, lock_threshold);
             return ret;
         }
-        public static ImVec2_c GetMouseDragDelta(ImGuiMouseButton button, float lock_threshold)
+        public static Vector2 GetMouseDragDelta(ImGuiMouseButton button, float lock_threshold)
         {
-            ImVec2_c ret = ImGuiNative.igGetMouseDragDelta(button, lock_threshold);
+            Vector2 ret = ImGuiNative.igGetMouseDragDelta(button, lock_threshold);
             return ret;
         }
-        public static ImVec2_c GetMousePos()
+        public static Vector2 GetMousePos()
         {
-            ImVec2_c ret = ImGuiNative.igGetMousePos();
+            Vector2 ret = ImGuiNative.igGetMousePos();
             return ret;
         }
-        public static ImVec2_c GetMousePosOnOpeningCurrentPopup()
+        public static Vector2 GetMousePosOnOpeningCurrentPopup()
         {
-            ImVec2_c ret = ImGuiNative.igGetMousePosOnOpeningCurrentPopup();
+            Vector2 ret = ImGuiNative.igGetMousePosOnOpeningCurrentPopup();
             return ret;
         }
         public static ImGuiPlatformIOPtr GetPlatformIO()
@@ -12799,10 +12799,10 @@ namespace ImGuiNET
             byte* ret = ImGuiNative.igGetStyleColorName(idx);
             return Util.StringFromPtr(ret);
         }
-        public static ImVec4_cPtr GetStyleColorVec4(ImGuiCol idx)
+        public static Vector4* GetStyleColorVec4(ImGuiCol idx)
         {
-            ImVec4_c* ret = ImGuiNative.igGetStyleColorVec4(idx);
-            return new ImVec4_cPtr(ret);
+            Vector4* ret = ImGuiNative.igGetStyleColorVec4(idx);
+            return ret;
         }
         public static float GetTextLineHeight()
         {
@@ -12839,14 +12839,14 @@ namespace ImGuiNET
             float ret = ImGuiNative.igGetWindowHeight();
             return ret;
         }
-        public static ImVec2_c GetWindowPos()
+        public static Vector2 GetWindowPos()
         {
-            ImVec2_c ret = ImGuiNative.igGetWindowPos();
+            Vector2 ret = ImGuiNative.igGetWindowPos();
             return ret;
         }
-        public static ImVec2_c GetWindowSize()
+        public static Vector2 GetWindowSize()
         {
-            ImVec2_c ret = ImGuiNative.igGetWindowSize();
+            Vector2 ret = ImGuiNative.igGetWindowSize();
             return ret;
         }
         public static float GetWindowWidth()
@@ -28495,16 +28495,10 @@ namespace ImGuiNET
             }
             return ret != 0;
         }
-        public static bool DebugEditFontLoaderFlags(ImGuiFreeTypeLoaderFlagsPtr p_font_loader_flags)
+        public static IntPtr GetFontLoader()
         {
-            ImGuiFreeTypeLoaderFlags* native_p_font_loader_flags = p_font_loader_flags.NativePtr;
-            byte ret = ImGuiNative.ImGuiFreeType_DebugEditFontLoaderFlags(native_p_font_loader_flags);
-            return ret != 0;
-        }
-        public static ImFontLoaderPtr GetFontLoader()
-        {
-            ImFontLoader* ret = ImGuiNative.ImGuiFreeType_GetFontLoader();
-            return new ImFontLoaderPtr(ret);
+            IntPtr ret = ImGuiNative.ImGuiFreeType_GetFontLoader();
+            return ret;
         }
     }
 }
