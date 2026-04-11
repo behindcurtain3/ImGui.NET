@@ -26,6 +26,18 @@ namespace ImGuiNET
         public byte ConfigNavEscapeClearFocusWindow;
         public byte ConfigNavCursorVisibleAuto;
         public byte ConfigNavCursorVisibleAlways;
+        public byte ConfigDockingNoSplit;
+        public byte ConfigDockingNoDockingOver;
+        public byte ConfigDockingWithShift;
+        public byte ConfigDockingAlwaysTabBar;
+        public byte ConfigDockingTransparentPayload;
+        public byte ConfigViewportsNoAutoMerge;
+        public byte ConfigViewportsNoTaskBarIcon;
+        public byte ConfigViewportsNoDecoration;
+        public byte ConfigViewportsNoDefaultParent;
+        public byte ConfigViewportsPlatformFocusSetsImGuiFocus;
+        public byte ConfigDpiScaleFonts;
+        public byte ConfigDpiScaleViewports;
         public byte MouseDrawCursor;
         public byte ConfigMacOSXBehaviors;
         public byte ConfigInputTrickleEventQueue;
@@ -77,6 +89,7 @@ namespace ImGuiNET
         public float MouseWheel;
         public float MouseWheelH;
         public ImGuiMouseSource MouseSource;
+        public uint MouseHoveredViewport;
         public byte KeyCtrl;
         public byte KeyShift;
         public byte KeyAlt;
@@ -257,6 +270,11 @@ namespace ImGuiNET
         public byte MouseCtrlLeftAsRightClick;
         public fixed float MouseDownDuration[5];
         public fixed float MouseDownDurationPrev[5];
+        public Vector2 MouseDragMaxDistanceAbs_0;
+        public Vector2 MouseDragMaxDistanceAbs_1;
+        public Vector2 MouseDragMaxDistanceAbs_2;
+        public Vector2 MouseDragMaxDistanceAbs_3;
+        public Vector2 MouseDragMaxDistanceAbs_4;
         public fixed float MouseDragMaxDistanceSqr[5];
         public float PenPressure;
         public byte AppFocusLost;
@@ -291,6 +309,18 @@ namespace ImGuiNET
         public ref bool ConfigNavEscapeClearFocusWindow => ref Unsafe.AsRef<bool>(&NativePtr->ConfigNavEscapeClearFocusWindow);
         public ref bool ConfigNavCursorVisibleAuto => ref Unsafe.AsRef<bool>(&NativePtr->ConfigNavCursorVisibleAuto);
         public ref bool ConfigNavCursorVisibleAlways => ref Unsafe.AsRef<bool>(&NativePtr->ConfigNavCursorVisibleAlways);
+        public ref bool ConfigDockingNoSplit => ref Unsafe.AsRef<bool>(&NativePtr->ConfigDockingNoSplit);
+        public ref bool ConfigDockingNoDockingOver => ref Unsafe.AsRef<bool>(&NativePtr->ConfigDockingNoDockingOver);
+        public ref bool ConfigDockingWithShift => ref Unsafe.AsRef<bool>(&NativePtr->ConfigDockingWithShift);
+        public ref bool ConfigDockingAlwaysTabBar => ref Unsafe.AsRef<bool>(&NativePtr->ConfigDockingAlwaysTabBar);
+        public ref bool ConfigDockingTransparentPayload => ref Unsafe.AsRef<bool>(&NativePtr->ConfigDockingTransparentPayload);
+        public ref bool ConfigViewportsNoAutoMerge => ref Unsafe.AsRef<bool>(&NativePtr->ConfigViewportsNoAutoMerge);
+        public ref bool ConfigViewportsNoTaskBarIcon => ref Unsafe.AsRef<bool>(&NativePtr->ConfigViewportsNoTaskBarIcon);
+        public ref bool ConfigViewportsNoDecoration => ref Unsafe.AsRef<bool>(&NativePtr->ConfigViewportsNoDecoration);
+        public ref bool ConfigViewportsNoDefaultParent => ref Unsafe.AsRef<bool>(&NativePtr->ConfigViewportsNoDefaultParent);
+        public ref bool ConfigViewportsPlatformFocusSetsImGuiFocus => ref Unsafe.AsRef<bool>(&NativePtr->ConfigViewportsPlatformFocusSetsImGuiFocus);
+        public ref bool ConfigDpiScaleFonts => ref Unsafe.AsRef<bool>(&NativePtr->ConfigDpiScaleFonts);
+        public ref bool ConfigDpiScaleViewports => ref Unsafe.AsRef<bool>(&NativePtr->ConfigDpiScaleViewports);
         public ref bool MouseDrawCursor => ref Unsafe.AsRef<bool>(&NativePtr->MouseDrawCursor);
         public ref bool ConfigMacOSXBehaviors => ref Unsafe.AsRef<bool>(&NativePtr->ConfigMacOSXBehaviors);
         public ref bool ConfigInputTrickleEventQueue => ref Unsafe.AsRef<bool>(&NativePtr->ConfigInputTrickleEventQueue);
@@ -342,6 +372,7 @@ namespace ImGuiNET
         public ref float MouseWheel => ref Unsafe.AsRef<float>(&NativePtr->MouseWheel);
         public ref float MouseWheelH => ref Unsafe.AsRef<float>(&NativePtr->MouseWheelH);
         public ref ImGuiMouseSource MouseSource => ref Unsafe.AsRef<ImGuiMouseSource>(&NativePtr->MouseSource);
+        public ref uint MouseHoveredViewport => ref Unsafe.AsRef<uint>(&NativePtr->MouseHoveredViewport);
         public ref bool KeyCtrl => ref Unsafe.AsRef<bool>(&NativePtr->KeyCtrl);
         public ref bool KeyShift => ref Unsafe.AsRef<bool>(&NativePtr->KeyShift);
         public ref bool KeyAlt => ref Unsafe.AsRef<bool>(&NativePtr->KeyAlt);
@@ -364,6 +395,7 @@ namespace ImGuiNET
         public ref bool MouseCtrlLeftAsRightClick => ref Unsafe.AsRef<bool>(&NativePtr->MouseCtrlLeftAsRightClick);
         public RangeAccessor<float> MouseDownDuration => new RangeAccessor<float>(NativePtr->MouseDownDuration, 5);
         public RangeAccessor<float> MouseDownDurationPrev => new RangeAccessor<float>(NativePtr->MouseDownDurationPrev, 5);
+        public RangeAccessor<Vector2> MouseDragMaxDistanceAbs => new RangeAccessor<Vector2>(&NativePtr->MouseDragMaxDistanceAbs_0, 5);
         public RangeAccessor<float> MouseDragMaxDistanceSqr => new RangeAccessor<float>(NativePtr->MouseDragMaxDistanceSqr, 5);
         public ref float PenPressure => ref Unsafe.AsRef<float>(&NativePtr->PenPressure);
         public ref bool AppFocusLost => ref Unsafe.AsRef<bool>(&NativePtr->AppFocusLost);
@@ -459,6 +491,10 @@ namespace ImGuiNET
         public void AddMouseSourceEvent(ImGuiMouseSource source)
         {
             ImGuiNative.ImGuiIO_AddMouseSourceEvent((ImGuiIO*)(NativePtr), source);
+        }
+        public void AddMouseViewportEvent(uint id)
+        {
+            ImGuiNative.ImGuiIO_AddMouseViewportEvent((ImGuiIO*)(NativePtr), id);
         }
         public void AddMouseWheelEvent(float wheel_x, float wheel_y)
         {

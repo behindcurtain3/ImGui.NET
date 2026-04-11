@@ -1,0 +1,181 @@
+name: Build Native Libraries
+
+on:
+  push:
+    branches: [ master, main ]
+    tags:
+      - 'v*'
+  pull_request:
+    branches: [ master, main ]
+  workflow_dispatch:
+    inputs:
+      imgui_version:
+        description: 'Dear ImGui version to build (e.g., v1.92.5)'
+        required: false
+        type: string
+
+env:
+  BUILD_TYPE: Release
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+    strategy:
+      matrix:
+        arch: [x86, x64, ARM64]
+        include:
+          - arch: x86
+            cmake_arch: Win32
+          - arch: x64
+            cmake_arch: x64
+          - arch: ARM64
+            cmake_arch: ARM64
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Configure CMake
+        run: |
+          cd cimgui
+          mkdir -p build/${{ matrix.arch }}
+          cd build/${{ matrix.arch }}
+          cmake ../.. -A ${{ matrix.cmake_arch }} -DCMAKE_MSVC_RUNTIME_LIBRARY=MultiThreaded
+
+      - name: Build
+        run: |
+          cd cimgui/build/${{ matrix.arch }}
+          cmake --build . --config ${{ env.BUILD_TYPE }}
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: cimgui-win-${{ matrix.arch }}
+          path: cimgui/build/${{ matrix.arch }}/${{ env.BUILD_TYPE }}/cimgui.dll
+
+  build-linux:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential cmake
+
+      - name: Configure CMake
+        run: |
+          cd cimgui
+          mkdir -p build/Release
+          cd build/Release
+          cmake ../.. -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }}
+
+      - name: Build
+        run: |
+          cd cimgui/build/Release
+          make
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: cimgui-linux-x64
+          path: cimgui/build/Release/cimgui.so
+
+  build-macos:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Configure CMake (Universal Binary)
+        run: |
+          cd cimgui
+          mkdir -p build/Release
+          cd build/Release
+          cmake ../.. -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} \
+            -DCMAKE_OSX_ARCHITECTURES="x86_64;arm64" \
+            -DCMAKE_OSX_DEPLOYMENT_TARGET=10.13
+
+      - name: Build
+        run: |
+          cd cimgui/build/Release
+          make
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: cimgui-osx
+          path: cimgui/build/Release/cimgui.dylib
+
+  generate-definitions:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install LuaJIT
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y luajit
+
+      - name: Generate definitions
+        run: |
+          cd cimgui/generator
+          luajit ./generator.lua gcc "internal noimstrv"
+
+      - name: Copy definitions to root
+        run: |
+          cp cimgui/generator/output/definitions.json .
+          cp cimgui/generator/output/structs_and_enums.json .
+
+      - name: Upload definitions
+        uses: actions/upload-artifact@v4
+        with:
+          name: definitions
+          path: |
+            definitions.json
+            structs_and_enums.json
+
+  create-release:
+    needs: [build-windows, build-linux, build-macos, generate-definitions]
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/')
+    permissions:
+      contents: write
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - name: Debug artifact structure
+        run: |
+          echo "Artifact structure:"
+          find artifacts -type f
+
+      - name: Prepare release files
+        run: |
+          mkdir release
+          cp artifacts/cimgui-win-x86/cimgui.dll release/cimgui.win-x86.dll
+          cp artifacts/cimgui-win-x64/cimgui.dll release/cimgui.win-x64.dll
+          cp artifacts/cimgui-win-ARM64/cimgui.dll release/cimgui.win-arm64.dll
+          cp artifacts/cimgui-linux-x64/cimgui.so release/cimgui.so
+          cp artifacts/cimgui-osx/cimgui.dylib release/cimgui.dylib
+          cp artifacts/definitions/definitions.json release/
+          cp artifacts/definitions/structs_and_enums.json release/
+          ls -la release/
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: release/*
+          generate_release_notes: true
+          draft: false

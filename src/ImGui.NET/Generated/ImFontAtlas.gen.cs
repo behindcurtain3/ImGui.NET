@@ -138,6 +138,30 @@ namespace ImGuiNET
             ImFont* ret = ImGuiNative.ImFontAtlas_AddFontDefault((ImFontAtlas*)(NativePtr), native_font_cfg);
             return new ImFontPtr(ret);
         }
+        public ImFontPtr AddFontDefaultBitmap()
+        {
+            ImFontConfig* font_cfg = null;
+            ImFont* ret = ImGuiNative.ImFontAtlas_AddFontDefaultBitmap((ImFontAtlas*)(NativePtr), font_cfg);
+            return new ImFontPtr(ret);
+        }
+        public ImFontPtr AddFontDefaultBitmap(ImFontConfigPtr font_cfg)
+        {
+            ImFontConfig* native_font_cfg = font_cfg.NativePtr;
+            ImFont* ret = ImGuiNative.ImFontAtlas_AddFontDefaultBitmap((ImFontAtlas*)(NativePtr), native_font_cfg);
+            return new ImFontPtr(ret);
+        }
+        public ImFontPtr AddFontDefaultVector()
+        {
+            ImFontConfig* font_cfg = null;
+            ImFont* ret = ImGuiNative.ImFontAtlas_AddFontDefaultVector((ImFontAtlas*)(NativePtr), font_cfg);
+            return new ImFontPtr(ret);
+        }
+        public ImFontPtr AddFontDefaultVector(ImFontConfigPtr font_cfg)
+        {
+            ImFontConfig* native_font_cfg = font_cfg.NativePtr;
+            ImFont* ret = ImGuiNative.ImFontAtlas_AddFontDefaultVector((ImFontAtlas*)(NativePtr), native_font_cfg);
+            return new ImFontPtr(ret);
+        }
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP2_1_OR_GREATER
         public ImFontPtr AddFontFromFileTTF(ReadOnlySpan<char> filename)
         {

@@ -13,7 +13,6 @@ namespace ImGuiNET
         public byte FontDataOwnedByAtlas;
         public byte MergeMode;
         public byte PixelSnapH;
-        public byte PixelSnapV;
         public sbyte OversampleH;
         public sbyte OversampleV;
         public ushort EllipsisChar;
@@ -28,6 +27,7 @@ namespace ImGuiNET
         public uint FontLoaderFlags;
         public float RasterizerMultiply;
         public float RasterizerDensity;
+        public float ExtraSizeScale;
         public ImFontFlags Flags;
         public ImFont* DstFont;
         public IntPtr FontLoader;
@@ -47,7 +47,6 @@ namespace ImGuiNET
         public ref bool FontDataOwnedByAtlas => ref Unsafe.AsRef<bool>(&NativePtr->FontDataOwnedByAtlas);
         public ref bool MergeMode => ref Unsafe.AsRef<bool>(&NativePtr->MergeMode);
         public ref bool PixelSnapH => ref Unsafe.AsRef<bool>(&NativePtr->PixelSnapH);
-        public ref bool PixelSnapV => ref Unsafe.AsRef<bool>(&NativePtr->PixelSnapV);
         public ref sbyte OversampleH => ref Unsafe.AsRef<sbyte>(&NativePtr->OversampleH);
         public ref sbyte OversampleV => ref Unsafe.AsRef<sbyte>(&NativePtr->OversampleV);
         public ref ushort EllipsisChar => ref Unsafe.AsRef<ushort>(&NativePtr->EllipsisChar);
@@ -62,6 +61,7 @@ namespace ImGuiNET
         public ref uint FontLoaderFlags => ref Unsafe.AsRef<uint>(&NativePtr->FontLoaderFlags);
         public ref float RasterizerMultiply => ref Unsafe.AsRef<float>(&NativePtr->RasterizerMultiply);
         public ref float RasterizerDensity => ref Unsafe.AsRef<float>(&NativePtr->RasterizerDensity);
+        public ref float ExtraSizeScale => ref Unsafe.AsRef<float>(&NativePtr->ExtraSizeScale);
         public ref ImFontFlags Flags => ref Unsafe.AsRef<ImFontFlags>(&NativePtr->Flags);
         public ImFontPtr DstFont => new ImFontPtr(NativePtr->DstFont);
         public ref IntPtr FontLoader => ref Unsafe.AsRef<IntPtr>(&NativePtr->FontLoader);
