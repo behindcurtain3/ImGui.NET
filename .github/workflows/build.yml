@@ -20,10 +20,20 @@ jobs:
         dotnet-version: 8.0.x
 
     - name: Restore dependencies
-      run: dotnet restore src
+      run: |
+        dotnet restore src/ImGui.NET
+        dotnet restore src/ImPlot.NET
+        dotnet restore src/ImNodes.NET
+        dotnet restore src/ImGuizmo.NET
+        dotnet restore src/CodeGenerator
 
     - name: Build Project
-      run: dotnet build -c Release --no-restore src
+      run: |
+        dotnet build -c Release --no-restore src/ImGui.NET
+        dotnet build -c Release --no-restore src/ImPlot.NET
+        dotnet build -c Release --no-restore src/ImNodes.NET
+        dotnet build -c Release --no-restore src/ImGuizmo.NET
+        dotnet build -c Release --no-restore src/CodeGenerator
 
     - name: Build Packages
       run: dotnet pack src/ImGui.NET -c Release --no-restore --no-build
