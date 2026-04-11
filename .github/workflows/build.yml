@@ -6,8 +6,11 @@ on:
   pull_request:
     branches: [ master ]
 jobs:
-  Build_Windows:
-    runs-on: windows-latest
+  build:
+    strategy:
+      matrix:
+        os: [windows-latest, ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
     steps:
     - name: Checkout Repository
       uses: actions/checkout@v4
@@ -36,19 +39,9 @@ jobs:
         dotnet build -c Release --no-restore src/CodeGenerator
 
     - name: Build Packages
+      if: matrix.os == 'windows-latest'
       run: dotnet pack src/ImGui.NET -c Release --no-restore --no-build
 
     - name: List Packages
+      if: matrix.os == 'windows-latest'
       run: ls -l bin\Release\ImGui.NET\
-
-    - name: Validate Generated Code
-      if: false # startsWith(github.ref, 'refs/tags/')
-      shell: bash
-      run: |
-        echo "Running CodeGenerator"
-        bin/Release/CodeGenerator/net8.0/CodeGenerator.exe "src/ImGui.NET/Generated"
-        git status -s | findstr . && echo "ERROR: CodeGenerator is not executed, please execute it." && exit 1 || exit 0
-
-    - name: Publish to nuget.org
-      if: startsWith(github.ref, 'refs/tags/')
-      run: dotnet nuget push bin\Release\ImGui.NET\*.nupkg -s https://api.nuget.org/v3/index.json --api-key ${{secrets.NUGET_KEY}}
